@@ -91,7 +91,7 @@ python -m venv .venv
 
 pip install -r requirements.txt
 jupyter lab  # or: jupyter notebook
-
+```
 # Open notebooks/Return_Panel_Model.ipynb or notebooks/Turnover_OLS-HAC_model.ipynb and run all cells.
 # If required CSVs are not found locally, the notebooks download them from the shared Google Drive folder into data/raw/.
 
