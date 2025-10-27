@@ -57,19 +57,28 @@ Figures, robustness checks, and grouped-Wald tests appear in the notebooks and p
 
 ## Repository layout
 
-notebooks/
-Return_Panel_Model.ipynb # returns panel with two-way FE
-Turnover_OLS-HAC_model.ipynb # turnover model with HAC errors
-poster/
-Research_Poster_Hagai_BY.pdf
-src/
-config.py # path helpers (DATA_ROOT, sample/raw)
-data/
-README.md # data notes; raw files are not tracked
+repo-root/
+├─ notebooks/
+│  ├─ Return_Panel_Model.ipynb
+│  └─ Turnover_OLS-HAC_model.ipynb
+├─ poster/
+│  └─ Research_Poster_Hagai_BY.pdf
+├─ src/
+│  └─ config.py
+├─ data/
+│  ├─ README.md
+│  └─ (raw/ and sample/ are created locally; git-ignored)
+├─ download_data.py
+├─ make_sample.py
+├─ requirements.txt
+└─ README.md
 
 
+
+### Quick start
+```markdown
 ## Quick start
-```bash
+
 git clone https://github.com/Hagai-BY/TASE-Red-Alert-Impact.git
 cd TASE-Red-Alert-Impact
 
@@ -82,11 +91,8 @@ python -m venv .venv
 pip install -r requirements.txt
 jupyter lab  # or: jupyter notebook
 
-Open notebooks/Return_Panel_Model.ipynb or notebooks/Turnover_OLS-HAC_model.ipynb and run all cells.
-If required CSVs are not found locally, the notebooks download them from the shared Google Drive folder into data/raw/.
+# Open notebooks/Return_Panel_Model.ipynb or notebooks/Turnover_OLS-HAC_model.ipynb and run all cells.
+# If required CSVs are not found locally, the notebooks download them from the shared Google Drive folder into data/raw/.
 
-
-Inline in notebooks:
-No action required. The notebooks download from the shared Drive folder when files are missing and then load from data/raw/.
 
 
