@@ -56,22 +56,24 @@ Rocket alerts can affect prices and liquidity within minutes, yet public data ra
 Figures, robustness checks, and grouped-Wald tests appear in the notebooks and poster.
 
 ## Repository layout
-
+```markdown
 repo-root/
 ├─ notebooks/
-│ ├─ Return_Panel_Model.ipynb
-│ └─ Turnover_OLS-HAC_model.ipynb
+│  ├─ Return_Panel_Model.ipynb
+│  └─ Turnover_OLS-HAC_model.ipynb
 ├─ poster/
-│ └─ Research_Poster_Hagai_BY.pdf
+│  └─ Research_Poster_Hagai_BY.pdf
 ├─ src/
-│ └─ config.py
+│  └─ config.py
 ├─ data/
-│ ├─ README.md
-│ └─ (raw/ and sample/ are created locally; git-ignored)
+│  ├─ README.md
+│  └─ (raw/ and sample/ are created locally; git-ignored)
 ├─ download_data.py
 ├─ make_sample.py
 ├─ requirements.txt
 └─ README.md
+
+
 
 
 ### Quick start
