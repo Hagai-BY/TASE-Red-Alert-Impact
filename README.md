@@ -25,11 +25,17 @@ Rocket alerts can affect prices and liquidity within minutes, yet public data ra
    Include minute-of-day seasonality and event-time indicators (τ = −15..+15).
 
 6. **Panel models**  
-   Returns:
-   \[
-     r_{i,t} = \alpha_i + \gamma_{m(t)} + \sum_{\tau=-15}^{+15} \delta_\tau \mathbf{1}\{\text{event time}=\tau\} + \varepsilon_{i,t}
-   \]
-   Turnover (log/level as specified) with Newey–West HAC errors; grouped Wald tests for pre/around/post.
+   **Returns**
+
+   $$
+   r_{i,t} = \alpha_i + \gamma_{m(t)} + \sum_{\tau=-15}^{+15} \delta_\tau \cdot \mathbf{1}\{\text{event-time}=\tau\} + \varepsilon_{i,t}
+   $$
+
+   **Turnover (log)**
+
+   $$
+   y_{i,t} = \alpha_i + \gamma_{m(t)} + \sum_{\tau=-15}^{+15} \beta_\tau \cdot \mathbf{1}\{\text{event-time}=\tau\} + u_{i,t}
+   $$
 
 7. **Quality control**  
    Sequence/time checks, volume reconciliation, tick-size enforcement, de-duplication, sparse-interval handling, outlier flags, validation of minute aggregates.
