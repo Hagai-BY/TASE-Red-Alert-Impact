@@ -30,18 +30,18 @@ Rocket alerts can affect prices and liquidity within minutes, yet public data ra
 
    $$
    r_{i,t}
-   \;=\;
+   \=\
    \sum_{k=-15}^{+15} \gamma_k\, D_{k,t}
-   \;+\; \alpha_i \;+\; \delta_d \;+\; \theta_h \;+\; \varepsilon_{i,t}
+   \+\ \alpha_i \+\ \delta_d \+\ \theta_h \+\ \varepsilon_{i,t}
    $$
 
    **Turnover (log, HAC):**
 
    $$
    \log\!\bigl(1+\mathrm{Turnover}^{\mathrm{TA35}}_{t}\bigr)
-   \;=\;
+   \=\
    \sum_{k=-15}^{+15} \beta_k\, D_{k,t}
-   \;+\; \delta_d \;+\; \theta_h \;+\; \varepsilon_{t}
+   \+\ \delta_d \+\ \theta_h \+\ \varepsilon_{t}
    $$
 
 
