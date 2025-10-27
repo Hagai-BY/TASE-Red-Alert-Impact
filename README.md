@@ -1,111 +1,78 @@
-# Market Impact of Rocket Alerts on TASE (High-Frequency Event Study)
+# Market Impact of Rocket Alerts on TASE (High-Frequency Study)
 
-This repository contains my guided research measuring the minute-by-minute market impact of rocket alerts on the Tel Aviv Stock Exchange (TASE). The pipeline converts **raw order-book messages** to **executed trades** and aggregates them to **1-minute OHLCV / turnover** series for panel estimation.
+Minute-by-minute event study on the Tel Aviv Stock Exchange (TASE).  
+Raw order-book messages are reconstructed into executed trades and aggregated to 1-minute OHLCV/turnover; events are aligned to rocket alerts and estimated via a two-way fixed-effects panel.
 
-## Highlights
-- **Order book → trades**: Parse order/add/cancel/execute messages, reconstruct prints, reconcile volumes, enforce tick size, deduplicate, and validate timestamps/sequence.
-- **Minute bars**: Aggregate to 1-minute OHLCV and turnover (NIS), handle missing minutes, suspend/open/close periods, and mark halts.
-- **Event alignment**: Merge the Home Front Command alert API and align events to a **±15 minute** window per alert; exclude open/close and overlapping windows.
-- **Two-way fixed effects**: Estimate abnormal returns with **stock fixed effects** and **time effects** (minute-of-day seasonality and event-time dummies). Turnover modeled with OLS and **Newey–West HAC** errors; grouped Wald tests for pre/around/post windows.
-- **Reproducibility**: Poster (PDF) and notebooks for returns and turnover models are included.
+## Problem
+Rocket alerts can affect prices and liquidity within minutes, yet public data rarely arrives as clean, aligned, high-frequency series. The goals are:
+1) convert noisy order-book messages into uniform 1-minute security-level series;  
+2) estimate short-run abnormal returns and turnover around alerts while controlling for stock and time effects.
 
-## Panel specs (compact)
-Returns:
-\[ r_{i,t} = \alpha_i + \gamma_{m(t)} + \sum_{\tau=-15}^{+15} \delta_\tau \cdot 1[\text{event time}=\tau] + \varepsilon_{i,t} \]
-Turnover (log):
-\[ y_{i,t} = \alpha_i + \gamma_{m(t)} + \sum_{\tau=-15}^{+15} \beta_\tau \cdot 1[\text{event time}=\tau] + u_{i,t} \]
-With HAC(Newey–West) for robust inference.
+## Methodology
+1. **Order book → trades**  
+   Parse add/cancel/execute messages, reconstruct prints, reconcile volumes, enforce tick size, de-duplicate, validate timestamps/sequence.
+
+2. **Continuous 1-minute bars**  
+   Aggregate to 1m OHLCV and turnover (₪), handle missing minutes, and mark open/close and halts.
+
+3. **Focus on market movers**  
+   Use the most influential TASE-35 constituents (by index weight/turnover) to maximize signal-to-noise.
+
+4. **Event alignment**  
+   Merge Home Front Command alerts and build a symmetric ±15-minute window per alert; exclude open/close and overlapping windows.
+
+5. **Controls for time patterns**  
+   Include minute-of-day seasonality and event-time indicators (τ = −15..+15).
+
+6. **Panel models**  
+   Returns:
+   \[
+     r_{i,t} = \alpha_i + \gamma_{m(t)} + \sum_{\tau=-15}^{+15} \delta_\tau \mathbf{1}\{\text{event time}=\tau\} + \varepsilon_{i,t}
+   \]
+   Turnover (log/level as specified) with Newey–West HAC errors; grouped Wald tests for pre/around/post.
+
+7. **Quality control**  
+   Sequence/time checks, volume reconciliation, tick-size enforcement, de-duplication, sparse-interval handling, outlier flags, validation of minute aggregates.
+
+## Results (high level)
+- **Returns:** small but statistically significant negative move around the alert; trough ≈ −0.035% several minutes post-alert.  
+- **Turnover:** sharper immediate drop, ~6% per minute on average in the first five minutes; ≈ ₪1.45M cumulative over 15 minutes for the analyzed names.  
+- No immediate full rebound within the ±15-minute window.
+
+Figures, robustness checks, and grouped-Wald tests appear in the notebooks and poster.
 
 ## Repository layout
-```
-notebooks/
-  Return_Panel_Model.ipynb
-  Turnover_OLS-HAC_model.ipynb
-poster/
-  Research_Poster_Hagai_Ben_Yehiel.pdf
-src/
-  (optional) scripts for parsing, aggregation, alignment, and modeling
-data/
-  README.md (data access notes; raw data not tracked)
-```
 
-## Data access
-- **Order book / trades**: use your exchange data feeds (not distributed here).  
-- **Rocket alerts**: Home Front Command alert API (documented in the notebook).  
-> Large files are **not committed**. See `.gitignore`. Consider Git LFS for PDFs/PNGs if needed.
+notebooks/
+Return_Panel_Model.ipynb # returns panel with two-way FE
+Turnover_OLS-HAC_model.ipynb # turnover model with HAC errors
+poster/
+Research_Poster_Hagai_BY.pdf
+src/
+config.py # path helpers (DATA_ROOT, sample/raw)
+data/
+README.md # data notes; raw files are not tracked
+
 
 ## Quick start
 ```bash
-# 1) create and activate env
+git clone https://github.com/Hagai-BY/TASE-Red-Alert-Impact.git
+cd TASE-Red-Alert-Impact
+
 python -m venv .venv
-# Linux/Mac:
-source .venv/bin/activate
-# Windows (PowerShell):
-# .venv\Scripts\Activate.ps1
+# Windows:
+. .venv\Scripts\Activate.ps1
+# macOS/Linux:
+# source .venv/bin/activate
 
-# 2) install deps
 pip install -r requirements.txt
-
-# 3) open notebooks
 jupyter lab  # or: jupyter notebook
-```
 
-## Requirements (main)
-See `requirements.txt` for versions: pandas, numpy, scipy, statsmodels, linearmodels, scikit-learn, matplotlib, jupyter.
-
-## License
-MIT
+Open notebooks/Return_Panel_Model.ipynb or notebooks/Turnover_OLS-HAC_model.ipynb and run all cells.
+If required CSVs are not found locally, the notebooks download them from the shared Google Drive folder into data/raw/.
 
 
-## Download data from Google Drive
-
-Use the provided script to pull large CSVs from Google Drive (after setting file sharing to "Anyone with the link → Viewer"):
-
-```bash
-pip install -r requirements.txt
-python download_data.py --orderbook <drive_link_or_id_for_order_book_ta125>                             --alerts    <drive_link_or_id_for_ta35_with_alerts>
-```
-
-The script accepts either a raw ID or a full share URL and downloads into `data/raw/`.  
-Configure paths with `DATA_ROOT` env var or `data_config.yaml`.
+Inline in notebooks:
+No action required. The notebooks download from the shared Drive folder when files are missing and then load from data/raw/.
 
 
-## Run "as is" — options
-
-**A. Auto-download from Google Drive**
-1) Put your public share links or file IDs into `data_links.json` (copy from `data_links.example.json`).
-2) Run:
-```bash
-python download_data.py --auto
-```
-This will fetch the files into `data/raw/`.
-
-**B. Quick demo with tiny samples**
-If you already have the big CSVs locally, create small samples and commit them so anyone can run:
-```bash
-python make_sample.py --orderbook data/raw/order_book_ta125.csv                           --alerts    data/raw/ta35_with_alerts.csv
-git add data/sample/*
-git commit -m "Add tiny sample data for demo runs"
-git push
-```
-Notebooks will detect `data/sample/` first if present.
-
-**C. Use a custom data directory**
-```bash
-# Windows
-set DATA_ROOT=D:\TASE_DATA
-# macOS/Linux
-export DATA_ROOT=/path/to/TASE_DATA
-```
-
-
-**Folder link option**
-Instead of two file links you can provide a single Google Drive **folder** link/ID containing the CSVs:
-```bash
-python download_data.py --folder "<drive_folder_link_or_id>"
-# or auto via data_links.json:
-# { "folder": "<drive_folder_link_or_id>" }
-python download_data.py --auto
-```
-The script will download the folder and try to locate files named
-`order_book_ta125.csv` and `ta35_with_alerts.csv` automatically.
