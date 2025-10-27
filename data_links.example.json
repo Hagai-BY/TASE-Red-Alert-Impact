@@ -1,0 +1,5 @@
+{
+  "folder": "YOUR_DRIVE_FOLDER_LINK_OR_ID",
+  "orderbook": "OPTIONAL_FILE_LINK_OR_ID",
+  "alerts": "OPTIONAL_FILE_LINK_OR_ID"
+}

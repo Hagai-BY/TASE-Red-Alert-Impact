@@ -1,0 +1,24 @@
+# OS / editors
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+env/
+venv/
+.ipynb_checkpoints/
+
+# Data (do not track raw or derived large files)
+data/*
+!data/README.md
+
+# Secrets
+*.env
+.env
+*.key
+*.pem
