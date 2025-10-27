@@ -56,7 +56,7 @@ Rocket alerts can affect prices and liquidity within minutes, yet public data ra
 Figures, robustness checks, and grouped-Wald tests appear in the notebooks and poster.
 
 ## Repository layout
-```markdown
+```
 repo-root/
 ├─ notebooks/
 │  ├─ Return_Panel_Model.ipynb
@@ -72,7 +72,7 @@ repo-root/
 ├─ make_sample.py
 ├─ requirements.txt
 └─ README.md
-
+```
 
 
 
