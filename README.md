@@ -24,18 +24,26 @@ Rocket alerts can affect prices and liquidity within minutes, yet public data ra
 5. **Controls for time patterns**  
    Include minute-of-day seasonality and event-time indicators (τ = −15..+15).
 
-6. **Panel models**  
-   **Returns**
+6. **Panel models**
+
+   **Returns (two-way FE):**
 
    $$
-   r_{i,t} = \alpha_i + \gamma_{m(t)} + \sum_{\tau=-15}^{+15} \delta_\tau \cdot \mathbf{1}\{\text{event-time}=\tau\} + \varepsilon_{i,t}
+   r_{i,t}
+   \;=\;
+   \sum_{k=-15}^{+15} \gamma_k\, D_{k,t}
+   \;+\; \alpha_i \;+\; \delta_d \;+\; \theta_h \;+\; \varepsilon_{i,t}
    $$
 
-   **Turnover (log)**
+   **Turnover (log, HAC):**
 
    $$
-   y_{i,t} = \alpha_i + \gamma_{m(t)} + \sum_{\tau=-15}^{+15} \beta_\tau \cdot \mathbf{1}\{\text{event-time}=\tau\} + u_{i,t}
+   \log\!\bigl(1+\mathrm{Turnover}^{\mathrm{TA35}}_{t}\bigr)
+   \;=\;
+   \sum_{k=-15}^{+15} \beta_k\, D_{k,t}
+   \;+\; \delta_d \;+\; \theta_h \;+\; \varepsilon_{t}
    $$
+
 
 7. **Quality control**  
    Sequence/time checks, volume reconciliation, tick-size enforcement, de-duplication, sparse-interval handling, outlier flags, validation of minute aggregates.
